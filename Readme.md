@@ -1,4 +1,4 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/vasdommes-test-organization/sdpb/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/vasdommes-test-organization/sdpb/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/vasdommes-test-organization/sdpb/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/vasdommes-test-organization/sdpb/tree/master)
 
 ## Contents
 
