@@ -18,8 +18,8 @@ jobs:
           name: Save images as tar
           command: |
             mkdir -p images
-            docker image save -o "images/sdpb" "sdpb"
-            docker image save -o "images/sdpb-test" "sdpb-test"
+            docker image save -o "images/sdpb/sdpb" "sdpb"
+            docker image save -o "images/sdpb-test/sdpb-test" "sdpb-test"
       - persist_to_workspace:
           root: .
           paths:
@@ -29,16 +29,31 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: .
-      - setup_remote_docker:
-          docker_layer_caching: true
+          at: images
+      - setup_remote_docker
       - run:
           name: Load images
           command: |
-            docker image load < "images/sdpb"
-            docker image load < "images/sdpb-test"
+            docker image load < "images/sdpb/sdpb"
+            docker image load < "images/sdpb-test/sdpb-test"
       - run: docker run sdpb sdpb --help
       - run: docker run sdpb-test ./test/run_all_tests.sh mpirun --oversubscribe
+  deploy-master:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: images/sdpb/sdpb
+      - setup_remote_docker
+      - run:
+          name: Load Docker image
+          command: docker image load < "images/sdpb/sdpb"
+      - run:
+          name: Publish Docker image vasdommes/sdpb:master
+          command: |
+            echo "${DOCKERHUB_PASS}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
+            docker tag sdpb "vasdommes/sdpb:master"
+            docker push "vasdommes/sdpb:master"
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
@@ -48,3 +63,10 @@ workflows:
       - test:
           requires:
             - build
+      - deploy-master:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build
+            - test
