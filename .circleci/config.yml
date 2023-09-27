@@ -29,7 +29,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: images
+          at: ./images
       - setup_remote_docker
       - run:
           name: Load images
@@ -43,7 +43,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: images/sdpb
+          at: ./images/sdpb
       - setup_remote_docker
       - run:
           name: Load Docker image
