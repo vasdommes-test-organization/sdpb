@@ -18,8 +18,8 @@ jobs:
           name: Save images as tar
           command: |
             mkdir -p images
-            docker image save -o "images/sdpb/sdpb" "sdpb"
-            docker image save -o "images/sdpb-test/sdpb-test" "sdpb-test"
+            docker image save -o "images/sdpb" "sdpb"
+            docker image save -o "images/sdpb-test" "sdpb-test"
       - persist_to_workspace:
           root: .
           paths:
@@ -34,8 +34,8 @@ jobs:
       - run:
           name: Load images
           command: |
-            docker image load < "images/sdpb/sdpb"
-            docker image load < "images/sdpb-test/sdpb-test"
+            docker image load < "images/sdpb"
+            docker image load < "images/sdpb-test"
       - run: docker run sdpb sdpb --help
       - run: docker run sdpb-test ./test/run_all_tests.sh mpirun --oversubscribe
   deploy-master:
@@ -43,11 +43,11 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: images/sdpb/sdpb
+          at: images/sdpb
       - setup_remote_docker
       - run:
           name: Load Docker image
-          command: docker image load < "images/sdpb/sdpb"
+          command: docker image load < "images/sdpb"
       - run:
           name: Publish Docker image vasdommes/sdpb:master
           command: |
