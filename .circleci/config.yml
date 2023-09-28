@@ -38,7 +38,7 @@ commands:
       tag:
         type: string
     steps:
-      # Do not deploy anything for forked PRs 
+      # Do not deploy anything for forked PRs
       # (i.e. PR from someuser/sdpb/master to davidsd/sdpb/master shouldn't trigger 'deploy-master' job and docker-push to davidsd/sdpb:master)
       # https://circleci.com/docs/configuration-reference/#ending-a-job-from-within-a-step
       # https://circleci.com/docs/variables/#built-in-environment-variables
@@ -86,8 +86,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - docker-load-sdpb
-      - run: docker run sdpb ls
-      - run: docker run sdpb-test ls
+      - run: docker run sdpb sdpb --help
+      - run: docker run sdpb-test ./test/run_all_tests.sh mpirun --oversubscribe
   
   deploy-master:
     # executor: docker/docker
